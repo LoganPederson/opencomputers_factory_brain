@@ -3,23 +3,41 @@ local me = component.me_controller -- Access the ME system
 local term = require("term")
 local running = true
 
--- set primary and secondary GPU
+-- Set screens
+local screens = {}
+for address in component.list("screen") do
+	table.instert(screens, address)
+end
+
+if #screens >= 2 then
+	Screen1 = component.proxy(screens[1])
+	Screen2 = component.proxy(screens[2])
+else
+	do
+		Screen1 = component.proxy(screens[1])
+	end
+end
+-- set primary and secondary GPU and Bind to Screens
 local gpus = {} --table to store GPU components
 for address in component.list("gpu") do
 	table.insert(gpus, address)
 end
-
 if #gpus >= 2 then
 	Gpu1 = component.proxy(gpus[1])
-	print(Gpu1)
+	if Gpu1 and Screen1 then
+		Gpu1.bind(Screen1)
+	end
 	Gpu2 = component.proxy(gpus[2])
-	print(Gpu2)
+	if Gpu2 and Screen2 then
+		Gpu2.bind(Screen2)
+	end
 else
 	do
 		Gpu1 = component.proxy(gpus[1])
-		print(Gpu1)
+		Gpu1.bind(Screen1)
 	end
 end
+
 -- Exit on Ctrl+C or other interruption
 local function signalHandler(eventName)
 	if eventName == "interrupted" then
