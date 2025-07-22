@@ -1,6 +1,5 @@
 import requests
 import random
-
 # This script should post to PasteBin PasteBin
 # when we commit to git, using Git Hooks.
 
@@ -22,7 +21,8 @@ def post_to_pastebin():
     data={
         "api_dev_key":api_dev_key,
         "api_option":api_option,
-        "api_paste_code":api_paste_code
+        "api_paste_code":api_paste_code,
+        "api_paste_format":"lua"
     }
 
     r = requests.post(
@@ -34,7 +34,7 @@ def post_to_pastebin():
     if r.status_code == 200:
         return(r.text)
     else:
-        return(f"ERROR: Status_Code ${r.status_code}")
+        return(f"ERROR: Status_Code ${r.status_code}, message: ${r.text}")
     #print(r.text)
     #print(r.status_code)
 
