@@ -64,27 +64,32 @@ end
 -- Event listener for interruptions
 require("event").listen("interrupted", signalHandler)
 
+--  Array of items to autocraft
+local itemsToCraftArray = {
+	-- Vanila Items
+	{ "Torch", 64, 10 },
+	-- ME Items
+	{ "Quartz Fiber", 64, 10 },
+	{ "ME Glass Cable - Fluix", 64, 10 },
+	-- EnderIO Items
+	{ "Basic Universal Cable", 64, 10 },
+	{ "Advanced Universal Cable", 64, 1 },
+	-- IndustrialCraft2 Items
+	--{"Forge Hammer", 5, 1)       -- These seem to only detect the first item seen, and if different durability then it sees just },
+	--{"Cutter", 5, 1)            -- I think using a for loop and checking size of each item returned would fix thi},
+	{ "Copper Plate", 64, 16 },
+	{ "Iron Plate", 64, 16 },
+	{ "Copper Cable", 64, 16 },
+	{ "Insulated Copper Cable", 64, 16 },
+	{ "Electronic Circuit", 64, 16 },
+}
+
 -- Monitor and craft items
 while running do
-	-- Vanila Items
-	checkAndCraft("Torch", 64, 10)
-	-- ME Items
-	checkAndCraft("Quartz Fiber", 64, 10)
-	checkAndCraft("ME Glass Cable - Fluix", 64, 10)
-	-- EnderIO Items
-	checkAndCraft("Basic Universal Cable", 64, 10)
-	checkAndCraft("Advanced Universal Cable", 64, 1)
-	-- IndustrialCraft2 Items
+	for _table in itemsToCraftArray do
+		checkAndCraft(_table[1], _table[2], _table[3])
+	end
+	os.sleep(1) -- {very 1 second},
 
-	--checkAndCraft("Forge Hammer", 5, 1)       -- These seem to only detect the first item seen, and if different durability then it sees just 1
-	--checkAndCraft("Cutter", 5, 1)            -- I think using a for loop and checking size of each item returned would fix this
-
-	checkAndCraft("Copper Plate", 64, 16)
-	checkAndCraft("Iron Plate", 64, 16)
-	checkAndCraft("Copper Cable", 64, 16)
-	checkAndCraft("Insulated Copper Cable", 64, 16)
-	checkAndCraft("Electronic Circuit", 64, 16)
 	term.clear()
-
-	os.sleep(3) -- Check every 3 seconds
 end
