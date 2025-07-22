@@ -1,9 +1,22 @@
 local component = require("component")
 local me = component.me_controller -- Access the ME system
 local term = require("term")
-local gpu = component.gpu
 local running = true
 
+-- set primary and secondary GPU
+local gpus = {} --table to store GPU components
+for address in component.list("gpu") do
+	table.insert(gpus, address)
+end
+
+if #gpus >= 2 then
+	Gpu1 = component.proxy(gpus[1])
+	Gpu2 = component.proxy(gpus[2])
+else
+	do
+		Gpu1 = component.proxy(gpus[1])
+	end
+end
 -- Exit on Ctrl+C or other interruption
 local function signalHandler(eventName)
 	if eventName == "interrupted" then
@@ -14,21 +27,16 @@ end
 -- Colored line of text
 -- text, color, paletcolor (optional)
 local function cWrite(text, fgc, pIndex)
-	local old_fgc, isPalette = gpu.getForeground()
+	local old_fgc, isPalette = Gpu1.getForeground()
 	pIndex = (type(pIndex) == "boolean") and pIndex or false
-	gpu.setForeground(fgc, pIndex)
+	Gpu1.setForeground(fgc, pIndex)
 	print(text)
-	gpu.setForeground(old_fgc, isPalette)
+	Gpu1.setForeground(old_fgc, isPalette)
 end
 
 -- Checks and crafts item
 local function checkAndCraft(itemLabel, threshold, craftAmount)
 	--TODO:output to a screen or remotely accessible place the items are missing
-
-	-- return if key pressed
-	if running == false then
-		return
-	end
 
 	local items = me.getItemsInNetwork({ label = itemLabel }) -- Get items in the ME system
 	local count = items[1] and items[1].size or 0 -- Get the count of the item or 0 if none
@@ -94,6 +102,11 @@ local itemsToCraftArray = {
 -- Monitor and craft items
 while running do
 	for _, _table in ipairs(itemsToCraftArray) do
+		-- return if key pressed (I don't think this is working how I expect though)
+		if running == false then
+			return
+		end
+
 		checkAndCraft(_table[1], _table[2], _table[3])
 	end
 	os.sleep(1) -- every 1 second,
