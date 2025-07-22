@@ -37,5 +37,5 @@ def post_to_pastebin():
     #print(r.text)
     #print(r.status_code)
 
-
+# Git's post-commit hook runs this script and relies on STDOUT, thus we print below
 print(post_to_pastebin())
