@@ -75,8 +75,8 @@ local itemsToCraftArray = {
 	{ "Basic Universal Cable", 64, 10 },
 	{ "Advanced Universal Cable", 64, 1 },
 	-- IndustrialCraft2 Items
-	--{"Forge Hammer", 5, 1)       -- These seem to only detect the first item seen, and if different durability then it sees just },
-	--{"Cutter", 5, 1)            -- I think using a for loop and checking size of each item returned would fix thi},
+	--{"Forge Hammer", 5, 1}       -- These seem to only detect the first item seen, and if different durability then it sees just },
+	--{"Cutter", 5, 1}            -- I think using a for loop and checking size of each item returned would fix thi},
 	{ "Copper Plate", 64, 16 },
 	{ "Iron Plate", 64, 16 },
 	{ "Copper Cable", 64, 16 },
@@ -86,10 +86,10 @@ local itemsToCraftArray = {
 
 -- Monitor and craft items
 while running do
-	for _table in itemsToCraftArray do
+	for _, _table in ipairs(itemsToCraftArray) do
 		checkAndCraft(_table[1], _table[2], _table[3])
 	end
-	os.sleep(1) -- {very 1 second},
+	os.sleep(1) -- every 1 second,
 
 	term.clear()
 end
