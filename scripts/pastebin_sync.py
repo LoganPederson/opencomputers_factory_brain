@@ -39,5 +39,5 @@ def post_to_pastebin():
     #print(r.status_code)
 
 # Git's post-commit hook runs this script and relies on STDOUT, thus we print below
-pastebin_response = post_to_pastebin().split('\\')
+pastebin_response = post_to_pastebin().split("\\")
 print(f"pastebin get {pastebin_response[-1]} {random.randint(1,100)}")
