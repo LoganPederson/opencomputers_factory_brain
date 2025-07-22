@@ -102,7 +102,7 @@ local itemsToCraftArray = {
 	{ "Electronic Circuit", 64, 16 },
 }
 
--- Monitor and craft items
+--- Monitor and craft items
 while running do
 	for _, _table in ipairs(itemsToCraftArray) do
 		-- return if key pressed (I don't think this is working how I expect though)
