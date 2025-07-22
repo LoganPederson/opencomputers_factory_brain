@@ -2,7 +2,7 @@ local component = require("component")
 local me = component.me_controller -- Access the ME system
 local term = require("term")
 local running = true
-
+--
 -- Set screens
 local screens = {}
 for address, name in component.list("screen") do
