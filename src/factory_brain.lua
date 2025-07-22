@@ -2,6 +2,10 @@ local component = require("component")
 local me = component.me_controller -- Access the ME system
 local term = require("term")
 local running = true
+
+-- color
+local colorRed = 0xff2d00
+
 --
 -- Set screens
 local screens = {}
@@ -47,7 +51,8 @@ end
 
 -- Colored line of text
 -- text, color, paletcolor (optional)
-local function cWrite(text, fgc, pIndex)
+local function cWrite(text, fgc, pIndex, gpu)
+	gpu = gpu or Gpu1 -- default to Gpu1 if gpu is nil
 	local old_fgc, isPalette = Gpu1.getForeground()
 	pIndex = (type(pIndex) == "boolean") and pIndex or false
 	Gpu1.setForeground(fgc, pIndex)
@@ -58,7 +63,7 @@ end
 -- Checks and crafts item
 local function checkAndCraft(itemLabel, threshold, craftAmount)
 	--TODO:output to a screen or remotely accessible place the items are missing
-
+	cWrite("Testing Screen2!", colorRed, Gpu2)
 	local items = me.getItemsInNetwork({ label = itemLabel }) -- Get items in the ME system
 	local count = items[1] and items[1].size or 0 -- Get the count of the item or 0 if none
 	print(itemLabel .. " in system: " .. count)
