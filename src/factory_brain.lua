@@ -5,8 +5,8 @@ local running = true
 
 -- Set screens
 local screens = {}
-for address in component.list("screen") do
-	table.instert(screens, address)
+for address, name in component.list("screen") do
+	table.insert(screens, address)
 end
 
 if #screens >= 2 then
