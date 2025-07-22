@@ -1,4 +1,5 @@
 import requests
+import random
 
 # This script should post to PasteBin PasteBin
 # when we commit to git, using Git Hooks.
@@ -38,4 +39,5 @@ def post_to_pastebin():
     #print(r.status_code)
 
 # Git's post-commit hook runs this script and relies on STDOUT, thus we print below
-print(post_to_pastebin())
+pastebin_response = post_to_pastebin().split('\\')
+print(f"pastebin get {pastebin_response[-1]} {random.randint(1,100)}")
