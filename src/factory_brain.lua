@@ -3,7 +3,7 @@ local me = component.me_controller -- Access the ME system
 local term = require("term")
 local gpu = component.gpu
 local running = true
--- testing again and again
+
 -- Exit on Ctrl+C or other interruption
 local function signalHandler(eventName)
 	if eventName == "interrupted" then
@@ -84,6 +84,7 @@ while running do
 	checkAndCraft("Copper Cable", 64, 16)
 	checkAndCraft("Insulated Copper Cable", 64, 16)
 	checkAndCraft("Electronic Circuit", 64, 16)
+	clear()
 
 	os.sleep(3) -- Check every 3 seconds
 end
