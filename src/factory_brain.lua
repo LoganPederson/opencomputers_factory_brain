@@ -23,6 +23,13 @@ end
 
 -- Checks and crafts item
 local function checkAndCraft(itemLabel, threshold, craftAmount)
+	--TODO:output to a screen or remotely accessible place the items are missing
+
+	-- return if key pressed
+	if running == false then
+		return
+	end
+
 	local items = me.getItemsInNetwork({ label = itemLabel }) -- Get items in the ME system
 	local count = items[1] and items[1].size or 0 -- Get the count of the item or 0 if none
 	print(itemLabel .. " in system: " .. count)
