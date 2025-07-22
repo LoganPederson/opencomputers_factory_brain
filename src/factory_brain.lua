@@ -5,16 +5,16 @@ local running = true
 --
 -- Set screens
 local screens = {}
-for address, name in component.list("screen") do
+for name, address in component.list("screen") do
 	table.insert(screens, address)
 end
 
 if #screens >= 2 then
-	Screen1 = component.proxy(screens[1].address)
-	Screen2 = component.proxy(screens[2].address)
+	Screen1 = component.proxy(screens[1])
+	Screen2 = component.proxy(screens[2])
 else
 	do
-		Screen1 = component.proxy(screens[1].address)
+		Screen1 = component.proxy(screens[1])
 	end
 end
 -- set primary and secondary GPU and Bind to Screens
