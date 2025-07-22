@@ -11,10 +11,13 @@ end
 
 if #gpus >= 2 then
 	Gpu1 = component.proxy(gpus[1])
+	print(Gpu1)
 	Gpu2 = component.proxy(gpus[2])
+	print(Gpu2)
 else
 	do
 		Gpu1 = component.proxy(gpus[1])
+		print(Gpu1)
 	end
 end
 -- Exit on Ctrl+C or other interruption
@@ -109,7 +112,7 @@ while running do
 
 		checkAndCraft(_table[1], _table[2], _table[3])
 	end
-	os.sleep(1) -- every 1 second,
+	os.sleep(1) -- every 1 second
 
 	term.clear()
 end
