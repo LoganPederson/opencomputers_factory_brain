@@ -7,7 +7,7 @@ import requests
 
 # Get the contents of the factory_brain script
 def get_script_contents():
-    with open("../src/factory_brain.lua","r") as f:
+    with open("/home/logan/programming/minecraft/opencomputers/factory-brain/src/factory_brain.lua","r") as f:
         script_contents = f.read()
         return script_contents
 
@@ -38,5 +38,4 @@ def post_to_pastebin():
     #print(r.status_code)
 
 
-if __name__ == "__main__":
-    print(post_to_pastebin())
+print(post_to_pastebin())
