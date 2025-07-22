@@ -84,7 +84,7 @@ while running do
 	checkAndCraft("Copper Cable", 64, 16)
 	checkAndCraft("Insulated Copper Cable", 64, 16)
 	checkAndCraft("Electronic Circuit", 64, 16)
-	clear()
+	term.clear()
 
 	os.sleep(3) -- Check every 3 seconds
 end
