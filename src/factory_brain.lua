@@ -3,7 +3,7 @@ local me = component.me_controller -- Access the ME system
 local term = require("term")
 local gpu = component.gpu
 local running = true
-
+-- test
 -- Exit on Ctrl+C or other interruption
 local function signalHandler(eventName)
 	if eventName == "interrupted" then
