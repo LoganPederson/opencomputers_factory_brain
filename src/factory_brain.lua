@@ -10,11 +10,11 @@ for address, name in component.list("screen") do
 end
 
 if #screens >= 2 then
-	Screen1 = component.proxy(screens[1])
-	Screen2 = component.proxy(screens[2])
+	Screen1 = component.proxy(screens[1].address)
+	Screen2 = component.proxy(screens[2].address)
 else
 	do
-		Screen1 = component.proxy(screens[1])
+		Screen1 = component.proxy(screens[1].address)
 	end
 end
 -- set primary and secondary GPU and Bind to Screens
@@ -63,11 +63,11 @@ local function checkAndCraft(itemLabel, threshold, craftAmount)
 	local count = items[1] and items[1].size or 0 -- Get the count of the item or 0 if none
 	print(itemLabel .. " in system: " .. count)
 
-	if count < threshold then
+	if count < tonumber(threshold) then
 		--print("Requesting " .. craftAmount .. " " .. itemLabel)
 		local craftables = me.getCraftables({ label = itemLabel }) -- Get craftable items
 		if craftables[1] then
-			local request = craftables[1].request(craftAmount)
+			local request = craftables[1].request(tonumber(craftAmount))
 			local isCanceled, errorMessage = request.isCanceled()
 			if isCanceled or errorMessage == "request failed (missing resources?)" then
 				--print("Crafting failed to start for " .. itemLabel)
