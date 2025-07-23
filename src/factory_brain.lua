@@ -95,6 +95,14 @@ local function clearScreen(gpu)
 	end
 end
 
+local function clearAllScreens()
+	if Gpu1 then
+		clearScreen(Gpu1)
+	end
+	if Gpu2 then
+		clearScreen(Gpu2)
+	end
+end
 -- Checks and crafts item
 local function checkAndCraft(itemLabel, threshold, craftAmount)
 	--TODO:output to a screen or remotely accessible place the items are missing
@@ -171,5 +179,5 @@ while running do
 		checkAndCraft(_table[1], _table[2], _table[3])
 	end
 	os.sleep(1) -- every 1 second
-	clearScreen()
+	clearAllScreens()
 end
