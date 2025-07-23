@@ -56,7 +56,7 @@ end
 -- text, color, paletcolor (optional), gpu (optional)
 local function cWrite(text, fgc, pIndex, gpu)
 	gpu = gpu or Gpu1 -- default to Gpu1
-	fgc = gfc or 0xffffff -- default color white
+	fgc = fgc or 0xffffff -- default color white
 	local line
 
 	if gpu == Gpu1 then
@@ -133,6 +133,8 @@ local function checkAndCraft(itemLabel, threshold, craftAmount)
 	else
 		cWrite(itemLabel .. " stock is sufficient.", 0x845aa3)
 	end
+
+	cWrite("\n", nil, nil, nil)
 end
 
 -- Event listener for interruptions
@@ -169,6 +171,5 @@ while running do
 		checkAndCraft(_table[1], _table[2], _table[3])
 	end
 	os.sleep(1) -- every 1 second
-
-	term.clear()
+	clearScreen()
 end
