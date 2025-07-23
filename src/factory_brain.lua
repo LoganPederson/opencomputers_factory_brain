@@ -2,14 +2,17 @@ local component = require("component")
 local me = component.me_controller -- Access the ME system
 local term = require("term")
 local running = true
+local line1 = 1 -- For Gpu1
+local line2 = 1 -- For Gpu2
 
 -- color
 local colorRed = 0xff2d00
+local colorGreen = 0x0cff00
+local colorPurple = 0x845aa3
 
---
 -- Set screens
 local screens = {}
-for name, address in component.list("screen") do
+for address, name in component.list("screen") do
 	table.insert(screens, address)
 end
 
@@ -29,16 +32,16 @@ end
 if #gpus >= 2 then
 	Gpu1 = component.proxy(gpus[1])
 	if Gpu1 and Screen1 then
-		Gpu1.bind(Screen1)
+		Gpu1.bind(Screen1.address)
 	end
 	Gpu2 = component.proxy(gpus[2])
 	if Gpu2 and Screen2 then
-		Gpu2.bind(Screen2)
+		Gpu2.bind(Screen2.address)
 	end
 else
 	do
 		Gpu1 = component.proxy(gpus[1])
-		Gpu1.bind(Screen1)
+		Gpu1.bind(Screen1.address)
 	end
 end
 
@@ -50,20 +53,52 @@ local function signalHandler(eventName)
 end
 
 -- Colored line of text
--- text, color, paletcolor (optional)
+-- text, color, paletcolor (optional), gpu (optional)
 local function cWrite(text, fgc, pIndex, gpu)
-	gpu = gpu or Gpu1 -- default to Gpu1 if gpu is nil
-	local old_fgc, isPalette = Gpu1.getForeground()
+	gpu = gpu or Gpu1 -- default to Gpu1
+	fgc = gfc or 0xffffff -- default color white
+	local line
+
+	if gpu == Gpu1 then
+		line = line1
+	elseif gpu == Gpu2 then
+		line = line2
+	else
+		do
+			return -- Unknown GPU
+		end
+	end
+
+	local old_fgc, isPalette = gpu.getForeground()
 	pIndex = (type(pIndex) == "boolean") and pIndex or false
-	Gpu1.setForeground(fgc, pIndex)
-	print(text)
-	Gpu1.setForeground(old_fgc, isPalette)
+	gpu.setForeground(fgc, pIndex)
+	gpu.set(1, line, text)
+	gpu.setForeground(old_fgc, isPalette)
+
+	-- increment line counter
+	if gpu == Gpu1 then
+		line1 = line1 + 1
+	elseif gpu == Gpu2 then
+		line2 = line2 + 1
+	end
+end
+
+local function clearScreen(gpu)
+	gpu = gpu or Gpu1
+	local w, h = gpu.getResolution()
+	gpu.fill(1, 1, w, h, " ")
+
+	if gpu == Gpu1 then
+		line1 = 1
+	elseif gpu == Gpu2 then
+		line2 = 1
+	end
 end
 
 -- Checks and crafts item
 local function checkAndCraft(itemLabel, threshold, craftAmount)
 	--TODO:output to a screen or remotely accessible place the items are missing
-	cWrite("Testing Screen2!", colorRed, Gpu2)
+	cWrite("Testing Screen2!", colorRed, nil, Gpu2)
 	local items = me.getItemsInNetwork({ label = itemLabel }) -- Get items in the ME system
 	local count = items[1] and items[1].size or 0 -- Get the count of the item or 0 if none
 	print(itemLabel .. " in system: " .. count)
