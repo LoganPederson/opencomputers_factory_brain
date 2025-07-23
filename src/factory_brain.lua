@@ -101,7 +101,7 @@ local function checkAndCraft(itemLabel, threshold, craftAmount)
 	cWrite("Testing Screen2!", colorRed, nil, Gpu2)
 	local items = me.getItemsInNetwork({ label = itemLabel }) -- Get items in the ME system
 	local count = items[1] and items[1].size or 0 -- Get the count of the item or 0 if none
-	print(itemLabel .. " in system: " .. count)
+	cWrite(itemLabel .. " in system: " .. count, nil, nil, nil)
 
 	if count < tonumber(threshold) then
 		--print("Requesting " .. craftAmount .. " " .. itemLabel)
@@ -133,8 +133,6 @@ local function checkAndCraft(itemLabel, threshold, craftAmount)
 	else
 		cWrite(itemLabel .. " stock is sufficient.", 0x845aa3)
 	end
-
-	print("\n")
 end
 
 -- Event listener for interruptions
