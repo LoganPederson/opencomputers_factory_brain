@@ -37,12 +37,22 @@ if #gpus >= 2 then
 	Gpu2 = component.proxy(gpus[2])
 	if Gpu2 and Screen2 then
 		Gpu2.bind(Screen2.address)
+		Gpu2.setResolution(50, 25)
 	end
 else
 	do
 		Gpu1 = component.proxy(gpus[1])
 		Gpu1.bind(Screen1.address)
 	end
+end
+
+local function tableContains(tbl, val)
+	for _, v in ipairs(tbl) do
+		if v == val then
+			return true
+		end
+	end
+	return false
 end
 
 -- Exit on Ctrl+C or other interruption
@@ -103,14 +113,16 @@ local function clearAllScreens()
 		clearScreen(Gpu2)
 	end
 end
+
+-- clear all screens to start
+clearAllScreens()
+
 -- Checks and crafts item
 local function checkAndCraft(itemLabel, threshold, craftAmount)
 	--TODO:output to a screen or remotely accessible place the items are missing
-	cWrite("Testing Screen2!", colorRed, nil, Gpu2)
 	local items = me.getItemsInNetwork({ label = itemLabel }) -- Get items in the ME system
 	local count = items[1] and items[1].size or 0 -- Get the count of the item or 0 if none
 	cWrite(itemLabel .. " in system: " .. count, nil, nil, nil)
-
 	if count < tonumber(threshold) then
 		--print("Requesting " .. craftAmount .. " " .. itemLabel)
 		local craftables = me.getCraftables({ label = itemLabel }) -- Get craftable items
@@ -118,7 +130,9 @@ local function checkAndCraft(itemLabel, threshold, craftAmount)
 			local request = craftables[1].request(tonumber(craftAmount))
 			local isCanceled, errorMessage = request.isCanceled()
 			if isCanceled or errorMessage == "request failed (missing resources?)" then
-				table.insert(failedItems, itemLabel)
+				if not tableContains(failedItems, itemLabel) then
+					table.insert(failedItems, itemLabel)
+				end
 				--print("Crafting failed to start for " .. itemLabel)
 				if errorMessage ~= nil then
 					cWrite("Error Details: " .. errorMessage, 0xff2d00)
@@ -171,6 +185,7 @@ local itemsToCraftArray = {
 
 --- Monitor and craft items
 while running do
+	clearAllScreens()
 	for _, item in ipairs(failedItems) do
 		cWrite(item, colorRed, nil, Gpu2)
 	end
@@ -183,5 +198,4 @@ while running do
 		checkAndCraft(_table[1], _table[2], _table[3])
 	end
 	os.sleep(1) -- every 1 second
-	clearAllScreens()
 end
