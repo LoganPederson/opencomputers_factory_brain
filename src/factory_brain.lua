@@ -59,7 +59,7 @@ local function cWrite(text, fgc, pIndex, gpu)
 	fgc = fgc or 0xffffff -- default color white
 	local line
 
-	if gpu == Gpu1 then
+	if gpu.address == Gpu1.address then
 		line = line1
 	elseif gpu == Gpu2 then
 		line = line2
@@ -88,9 +88,9 @@ local function clearScreen(gpu)
 	local w, h = gpu.getResolution()
 	gpu.fill(1, 1, w, h, " ")
 
-	if gpu == Gpu1 then
+	if gpu.address == Gpu1.address then
 		line1 = 1
-	elseif gpu == Gpu2 then
+	elseif gpu.address == Gpu2.address then
 		line2 = 1
 	end
 end
