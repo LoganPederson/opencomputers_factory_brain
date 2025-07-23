@@ -171,7 +171,7 @@ local itemsToCraftArray = {
 
 --- Monitor and craft items
 while running do
-	for item in failedItems do
+	for _, item in ipairs(failedItems) do
 		cWrite(item, colorRed, nil, Gpu2)
 	end
 	for _, _table in ipairs(itemsToCraftArray) do
