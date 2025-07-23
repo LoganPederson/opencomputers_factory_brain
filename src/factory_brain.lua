@@ -4,7 +4,7 @@ local term = require("term")
 local running = true
 local line1 = 1 -- For Gpu1
 local line2 = 1 -- For Gpu2
-
+local failedItems = {}
 -- color
 local colorRed = 0xff2d00
 local colorGreen = 0x0cff00
@@ -118,6 +118,7 @@ local function checkAndCraft(itemLabel, threshold, craftAmount)
 			local request = craftables[1].request(tonumber(craftAmount))
 			local isCanceled, errorMessage = request.isCanceled()
 			if isCanceled or errorMessage == "request failed (missing resources?)" then
+				table.insert(failedItems, itemLabel)
 				--print("Crafting failed to start for " .. itemLabel)
 				if errorMessage ~= nil then
 					cWrite("Error Details: " .. errorMessage, 0xff2d00)
@@ -170,6 +171,9 @@ local itemsToCraftArray = {
 
 --- Monitor and craft items
 while running do
+	for item in failedItems do
+		cWrite(item, colorRed, nil, Gpu2)
+	end
 	for _, _table in ipairs(itemsToCraftArray) do
 		-- return if key pressed (I don't think this is working how I expect though)
 		if running == false then
